@@ -1,0 +1,41 @@
+states:
+- observation.state.arm.position:
+    origin_keys:
+    - observation.state:
+        start: 0
+        end: 6
+    - observation.state:
+        start: 7
+        end: 13
+- observation.state.effector.position:
+    origin_keys:
+    - observation.state:
+        start: 6
+        end: 7
+    - observation.state:
+        start: 13
+        end: 14
+actions:
+- action.arm.position:
+    origin_keys:
+    - action:
+        start: 0
+        end: 6
+    - action:
+        start: 7
+        end: 13
+    subtract_state: false
+- action.effector.position:
+    origin_keys:
+    - action:
+        start: 6
+        end: 7
+    - action:
+        start: 13
+        end: 14
+    subtract_state: false
+images:
+- observation.images.camera_top
+- observation.images.camera_wrist_left
+- observation.images.camera_wrist_right
+norm_stats: REPLACE_WITH_RS_NORM_STATS.json

@@ -1,0 +1,59 @@
+# Physical units: joints rad; gripper 0=closed, 1=open. First six values follow joint_names.
+contract:
+  schema: rs-lingbot/1
+  embodiment: b601_rs
+  arms: [right]
+  cameras: [camera_top, camera_wrist_right]
+  joint_names: [shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_yaw, wrist_roll]
+  joint_units: rad
+  gripper_units: open_fraction
+  action_type: absolute
+  action_dt_s: 0.02
+  rs_finetuned: false
+task: Pick up the block and place it in the tray.
+arms:
+  right:
+    port: can0
+    robot_id: rebot_b601_rs_vr
+    calibration_dir: null
+    # Example measured travel from the VR repository; verify on YOUR gripper.
+    gripper_closed_deg: 0.0
+    gripper_open_deg: 310.12
+    gripper_endpoints_verified: false
+    # Narrower than the RS URDF; start in a supported ready pose, not at zero.
+    lower: [-2.70, 0.05, 0.05, -1.47, -1.47, -3.04, 0.0]
+    upper: [2.70, 3.04, 3.04, 1.47, 1.47, 3.04, 1.0]
+    max_velocity: [0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.30]
+    max_acceleration: [0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.60]
+    max_tracking_error: [0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.035]
+    mock_initial: [0.0, 0.8, 0.8, 0.0, 0.0, 0.0, 0.7]
+    mit:
+      kp: [50, 50, 50, 30, 50, 50]
+      kd: [3, 5, 5, 3, 4, 4]
+      torque_limit_nm: [12, 12, 12, 3, 3, 3]
+      gravity_scale: 1.0
+      gripper_kp: 5.0
+      gripper_kd: 0.3
+cameras:
+  camera_top:
+    device: /dev/v4l/by-id/REPLACE_EXTERNAL_CAMERA
+    width: 640
+    height: 480
+    fps: 30
+  camera_wrist_right:
+    device: /dev/v4l/by-id/REPLACE_RIGHT_WRIST_CAMERA
+    width: 640
+    height: 480
+    fps: 30
+runtime:
+  control_hz: 50
+  max_tick_s: 0.08
+  max_observation_age_s: 0.15
+  max_camera_skew_s: 0.08
+  max_response_age_s: 0.25
+  policy_timeout_s: 30.0  # includes initial GPU warmup; control loop never waits for this
+  policy_wait_timeout_s: 2.0
+  execute_steps: 20
+  max_chunk_steps: 50
+  stop_file: ../STOP
+  log_dir: ../runs
